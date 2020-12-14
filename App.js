@@ -1,21 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { Provider as PaperProvider } from "react-native-paper";
+import { Provider as StoreProvider } from "react-redux";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import store from "./store";
+import { theme } from "./utils/themes";
+
+import Routes from "./routes/Routes";
+import { setLocalNotification } from "./utils/helpers";
+
+class App extends React.Component {
+  async componentDidMount() {
+    await setLocalNotification();
+  }
+
+  render() {
+    return (
+      <>
+        <StoreProvider store={store}>
+          <PaperProvider theme={theme}>
+            <Routes />
+          </PaperProvider>
+        </StoreProvider>
+      </>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

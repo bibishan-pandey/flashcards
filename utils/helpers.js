@@ -1,3 +1,9 @@
+import { AsyncStorage } from "react-native";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
+
+const NOTIFICATION_KEY = "FLASHCARDS_NOTIFICATION_KEY";
+
 /**
  * This function creates a deck object
  * @param deckTitle
@@ -86,4 +92,62 @@ export function setupDummyData() {
       ],
     },
   };
+}
+
+/**
+ * Returns a notification object
+ * @returns {{android: {sound: boolean, sticky: boolean, vibrate: boolean, priority: string}, title: string, body: string, ios: {sound: boolean}}}
+ */
+function createNotification() {
+  return {
+    title: "Practice with Flashcards",
+    body: "👋🏻 Don't forget to practice your quiz today!",
+    ios: {
+      sound: true,
+    },
+    android: {
+      sound: true,
+      priority: "high",
+      sticky: false,
+      vibrate: true,
+    },
+  };
+}
+
+/**
+ * Clears all local notification from async storage
+ * @returns {Promise<void>}
+ */
+export async function clearLocalNotification() {
+  AsyncStorage.removeItem(NOTIFICATION_KEY).then(
+    Notifications.cancelAllScheduledNotificationsAsync
+  );
+}
+
+/**
+ * Checks if notification permission is allowed and schedules or cancels scheduled notification
+ * @returns {Promise<void>}
+ */
+export async function setLocalNotification() {
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+    .then(JSON.parse)
+    .then((data) => {
+      if (data === null) {
+        Permissions.askAsync(Permissions.NOTIFICATIONS).then(({ status }) => {
+          if (status === "granted") {
+            Notifications.cancelAllScheduledNotificationsAsync();
+            let trigger = new Date();
+            trigger.setDate(trigger.getDate() + 1);
+            trigger.setHours(20);
+            trigger.setMinutes(0);
+
+            Notifications.scheduleNotificationAsync({
+              content: createNotification(),
+              trigger,
+            });
+            AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
+          }
+        });
+      }
+    });
 }
