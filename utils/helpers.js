@@ -102,15 +102,6 @@ function createNotification() {
   return {
     title: "Practice with Flashcards",
     body: "👋🏻 Don't forget to practice your quiz today!",
-    ios: {
-      sound: true,
-    },
-    android: {
-      sound: true,
-      priority: "high",
-      sticky: false,
-      vibrate: true,
-    },
   };
 }
 
@@ -131,23 +122,24 @@ export async function clearLocalNotification() {
 export async function setLocalNotification() {
   AsyncStorage.getItem(NOTIFICATION_KEY)
     .then(JSON.parse)
-    .then((data) => {
-      if (data === null) {
-        Permissions.askAsync(Permissions.NOTIFICATIONS).then(({ status }) => {
-          if (status === "granted") {
-            Notifications.cancelAllScheduledNotificationsAsync();
-            let trigger = new Date();
-            trigger.setDate(trigger.getDate() + 1);
-            trigger.setHours(20);
-            trigger.setMinutes(0);
+    .then(() => {
+      Permissions.askAsync(Permissions.NOTIFICATIONS).then(({ status }) => {
+        if (status === "granted") {
+          Notifications.cancelAllScheduledNotificationsAsync();
 
-            Notifications.scheduleNotificationAsync({
-              content: createNotification(),
-              trigger,
-            });
-            AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
-          }
-        });
-      }
+          Notifications.scheduleNotificationAsync({
+            content: createNotification(),
+            trigger: {
+              // uncomment this second and comment hour and minute to test notification
+              // and run the app in background
+              // seconds: 10,
+              hour: 18,
+              minute: 36,
+              repeats: true,
+            },
+          });
+          AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
+        }
+      });
     });
 }
