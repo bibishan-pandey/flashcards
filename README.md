@@ -23,14 +23,13 @@ $ npm start
 
 ## Screenshots
 
-![](screenshots/Decks.png)
-
-![](screenshots/Deck.png)
-
-![](screenshots/AddDeck.png)
-
-![](screenshots/AddCard.png)
-
-![](screenshots/Quiz.png)
-
-![](screenshots/QuizCompleted.png)
+<div>
+  <img src="https://github.com/bibishan-pandey/flashcards/blob/master/screenshots/Decks.png" width="25%" height="25%">
+  <img src="https://github.com/bibishan-pandey/flashcards/blob/master/screenshots/Deck.png" width="25%" height="25%">
+  <img src="https://github.com/bibishan-pandey/flashcards/blob/master/screenshots/AddDeck.png" width="25%" height="25%">
+</div>
+<div>
+  <img src="https://github.com/bibishan-pandey/flashcards/blob/master/screenshots/AddCard.png" width="25%" height="25%">
+  <img src="https://github.com/bibishan-pandey/flashcards/blob/master/screenshots/Quiz.png" width="25%" height="25%">
+  <img src="https://github.com/bibishan-pandey/flashcards/blob/master/screenshots/QuizCompleted.png" width="25%" height="25%">
+</div>
